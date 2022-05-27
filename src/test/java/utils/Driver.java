@@ -1,4 +1,5 @@
 package utils;
+
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -8,7 +9,12 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class Driver {
     private Driver() {
@@ -16,7 +22,7 @@ public class Driver {
 
     private static WebDriver driver;
 
-    public static WebDriver get() {
+    public static WebDriver get() throws MalformedURLException {
         if (driver == null) {
             ConfigReader.set("browser");
             String browser = ConfigReader.read("browser");
@@ -35,6 +41,14 @@ public class Driver {
                     driver = new ChromeDriver(new ChromeOptions().setHeadless(true));
                     break;
 
+                case "chrome-headless-remote":
+                    DesiredCapabilities caps = new DesiredCapabilities();
+                    caps.setBrowserName("chrome");
+
+                    /* The execution happens on the Selenium Grid with the address mentioned earlier */
+                    driver = new RemoteWebDriver(new URL("http://localhost:4444"), caps);
+                    break;
+
                 case "firefox":
                     WebDriverManager.firefoxdriver().setup();
                     FirefoxOptions firefoxOptions = new FirefoxOptions();
@@ -46,6 +60,14 @@ public class Driver {
                 case "firefox-headless":
                     WebDriverManager.firefoxdriver().setup();
                     driver = new FirefoxDriver(new FirefoxOptions().setHeadless(true));
+                    break;
+
+                case "firefox-headless-remote":
+                    DesiredCapabilities cap = new DesiredCapabilities();
+                    cap.setBrowserName("firefox");
+
+                    /* The execution happens on the Selenium Grid with the address mentioned earlier */
+                    driver = new RemoteWebDriver(new URL("http://localhost:4444"), cap);
                     break;
 
                 case "ie":

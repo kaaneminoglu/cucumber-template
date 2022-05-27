@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.Driver;
 
+import java.net.MalformedURLException;
 import java.time.Duration;
 
 public class BaseSteps extends BaseMethods {
@@ -17,7 +18,7 @@ public class BaseSteps extends BaseMethods {
     public WebDriverWait wait;
 
     @Before()
-    public void setUp(Scenario scenario) {
+    public void setUp(Scenario scenario) throws MalformedURLException {
         BaseMethods.folderName = scenario.getName();
         driver = Driver.get();
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
